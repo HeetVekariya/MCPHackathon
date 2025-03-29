@@ -186,20 +186,6 @@ mcp dev uns_mcp/server.py
 If you need to log request call parameters to `UnstructuredClient`, set the environment variable `DEBUG_API_REQUESTS=false`.
 The logs are stored in a file with the format `unstructured-client-{date}.log`, which can be examined to debug request call parameters to `UnstructuredClient` functions.
 
-## Running locally minimal client
-```
-uv run python minimal_client/client.py uns_mcp/server.py
-```
-
-or
-
-```
-make local-client
-```
-
-Env variables to configure behavior of the client:
-- `LOG_LEVEL="ERROR"` # If you would like to hide outputs from the LLM and present clear messages for the user
-- `CONFIRM_TOOL_USE='false'` If you would like to disable the tool use confirmation before running it (True by default). **BE MINDFUL** about that option, as LLM can decide to purge all data from your account or run some expensive workflows; use only for development purposes.
 
 ## Running locally minimal client, accessing local the MCP server over HTTP + SSE
 
