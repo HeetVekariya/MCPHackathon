@@ -22,11 +22,11 @@ Before you can begin working with the **UNS_MCP** project, make sure you have th
    - Get your API key from the [Unstructured platform](https://unstructured.io/) to access their API for document processing.
 
 2. **GOOGLEDRIVE_SERVICE_ACCOUNT_KEY**  
-   - Set up a Google Cloud project and create a service account to enable access to Google Drive for reading PDFs.
+   - Set up a Google Cloud project and create a service account to enable access to Google Drive for reading PDFs. Check the set up process [here](https://docs.unstructured.io/api-reference/workflow/sources/google-drive).
    - Save the JSON credentials for your service account and use it to set up the **GOOGLEDRIVE_SERVICE_ACCOUNT_KEY**.
 
 3. **MONGO_DB_CONNECTION_STRING**  
-   - Set up a MongoDB database (cloud) and get the connection string for connecting to the database.
+   - Set up a MongoDB database (cloud) and get the connection string for connecting to the database. Check out set up process [here](https://docs.unstructured.io/api-reference/workflow/destinations/mongodb).
 
 4. **.env.template**  
    - The `.env.template` file includes all the required environment variables. Copy this file to `.env` and set the necessary values for the keys mentioned above.
@@ -125,6 +125,7 @@ Note: **Tweak the Flow**: Adjust any step (partitioning, chunking, enrichment, e
 
 ![](img\list-workflow.png)
 ![](img\run-workflow.png)
+![](img\ui-job-output.png)
 
 ## Claude Desktop Integration
 
