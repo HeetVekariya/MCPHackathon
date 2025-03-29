@@ -1,6 +1,6 @@
-# Unstructured API MCP Server
+# Unstructured API MCP Server for Research Paper Data Processing
 
-An MCP server implementation for interacting with the Unstructured API. This server provides tools to list sources and workflows.
+By leveraging the Unstructured API, this server facilitates easy access to a set of powerful tools that extract meaningful information from research papers, which can then be used for fine-tuning a language model (LLM) to reduce the literature review time for researchers.
 
 ## Setup
 
@@ -13,18 +13,47 @@ or use `uv sync`.
 2. Set your Unstructured API key as an environment variable.
    - Create a `.env` file in the root directory, and add a line with your key: `UNSTRUCTURED_API_KEY="YOUR_KEY"`
 
-To test in local, any working key that pointing to prod env would work. However, to be able to return valid results from client's side (e.g, Claude for Desktop), your personal key that is fetched from `https://platform.unstructured.io/app/account/api-keys` is needed.
 
-## Running the Server
-Using the MCP CLI:
-```bash
-mcp run uns_mcp/server.py
-```
+## Requirements
 
-or:
-```bash
-uv run uns_mcp/server.py
-```
+Before you can begin working with the **UNS_MCP** project, make sure you have the following setup:
+
+1. **UNSTRUCTURED_API_KEY**  
+   - Get your API key from the [Unstructured platform](https://unstructured.io/) to access their API for document processing.
+
+2. **GOOGLEDRIVE_SERVICE_ACCOUNT_KEY**  
+   - Set up a Google Cloud project and create a service account to enable access to Google Drive for reading PDFs.
+   - Save the JSON credentials for your service account and use it to set up the **GOOGLEDRIVE_SERVICE_ACCOUNT_KEY**.
+
+3. **MONGO_DB_CONNECTION_STRING**  
+   - Set up a MongoDB database (cloud) and get the connection string for connecting to the database.
+
+4. **.env.template**  
+   - The `.env.template` file includes all the required environment variables. Copy this file to `.env` and set the necessary values for the keys mentioned above.
+
+   Example `.env` file:
+   ```bash
+   UNSTRUCTURED_API_KEY="<key-here>"
+   MONGO_DB_CONNECTION_STRING="<CONNECTION_STRING>"
+   GOOGLEDRIVE_SERVICE_ACCOUNT_KEY="<converted string>"
+
+
+## Project Flow
+
+1. User Query to MCP Client
+
+2. Claude Interacts with `UNS_MCP` Server
+   - Claude forwards the user's query to the custom MCP server named `UNS_MCP`.
+
+3. MCP Tool Executes Unstructured API
+   - `UNS_MCP` interacts with the Unstructured API to process the research paper PDF, extract relevant information, and convert it into structured JSON data.
+
+4. Structured Data (JSON) Output is stored in the destination source
+   - The result from the Unstructured API is transformed into JSON format, which can then be further utilized to fine-tune LLMs, helping researchers quickly find the relevant information without manually reading the entire paper.
+
+![](img\user-flow.png)
+
+![](img\unstructured-workflow.png)
 
 ## Available Tools
 
@@ -32,14 +61,14 @@ uv run uns_mcp/server.py
 |------|-------------|
 | `list_sources` | Lists available sources from the Unstructured API. |
 | `get_source_info` | Get detailed information about a specific source connector. |
-| `create_[connector]_source` | Create a source connector. Currently, we have s3/google drive/azure connectors (more to come!) |
-| `update_[connector]_source` | Update an existing source connector by params. |
-| `delete_[connector]_source` | Delete a source connector by source id. |
+| `create_gdrive_source` | Create a google drive source connector.
+| `update_gdrive_source` | Update an existing google source connector by params. |
+| `delete_gdrive_source` | Delete a source connector by source id. |
 | `list_destinations` | Lists available destinations from the Unstructured API. |
 | `get_destination_info` | Get detailed info about a specific destination connector. Currently, we have s3/weaviate/astra/neo4j/mongo DB (more to come!) |
-| `create_[connector]_destination` | Create a destination connector by params. |
-| `update_[connector]_destination` | Update an existing destination connector by destination id. |
-| `delete_[connector]_destination` | Delete a destination connector by destination id. |
+| `create_mongodb_destination` | Create a mongodb destination connector by params. |
+| `update_mongodb_destination` | Update an existing mongodb destination connector by destination id. |
+| `delete_mongodb_destination` | Delete a mongodb destination connector by destination id. |
 | `list_workflows` | Lists workflows from the Unstructured API. |
 | `get_workflow_info` | Get detailed information about a specific workflow. |
 | `create_workflow` | Create a new workflow with source, destination id, etc. |
@@ -51,37 +80,66 @@ uv run uns_mcp/server.py
 | `cancel_job` |Delete a specific job by id. |
 
 
-### Firecrawl Source
+## Follow Along
 
-[Firecrawl](https://www.firecrawl.dev/) is a web crawling API that provides two main capabilities in our MCP:
+### 1. **Set Up Required Connectors**
 
-1. **HTML Content Retrieval**: Using `invoke_firecrawl_crawlhtml` to start crawl jobs and `check_crawlhtml_status` to monitor them
-2. **LLM-Optimized Text Generation**: Using `invoke_firecrawl_llmtxt` to generate text and `check_llmtxt_status` to retrieve results
+#### Google Drive Source Connector:
+- **Create a Google Drive Source Connector** to connect your service account with Google Drive and retrieve PDFs.
+- **Test the connection** to ensure accessibility.
 
-How Firecrawl works:
+#### MongoDB Destination Connector:
+- **Set up the MongoDB Destination Connector** to store processed data.
+- **Test the connection** to ensure accessibility.
 
-**Web Crawling Process:**
-- Starts with a specified URL and analyzes it to identify links
-- Uses the sitemap if available; otherwise follows links found on the website
-- Recursively traverses each link to discover all subpages
-- Gathers content from every visited page, handling JavaScript rendering and rate limits
-- Jobs can be cancelled with `cancel_crawlhtml_job` if needed
-- Use this if you require all the info extracted into raw HTML, Unstructured's workflow cleans it up really well  :smile:
+---
 
-**LLM Text Generation:**
-- After crawling, extracts clean, meaningful text content from the crawled pages
-- Generates optimized text formats specifically formatted for large language models
-- Results are automatically uploaded to the specified S3 location
-- Note: LLM text generation jobs cannot be cancelled once started. The `cancel_llmtxt_job` function is provided for consistency but is not currently supported by the Firecrawl API.
+### 2. **Develop the Workflow**
 
-Note: A `FIRECRAWL_API_KEY` environment variable must be set to use these functions.
+1. **Define Connectors**: Set up the **Google Drive** source and **MongoDB** destination connectors.
+   
+2. **Partitioning**: Use **Auto partitioning** for optimal document splitting.
 
+3. **Chunking**: Apply **by-page chunking** for manageable text segments.
+
+4. **Enrichment**: Use **NER** to extract entities and **table enrichment** for any tables.
+
+5. **Embedding**: Convert text into embeddings for querying or analysis.
+
+Note: **Tweak the Flow**: Adjust any step (partitioning, chunking, enrichment, embedding) as needed.
+
+---
+
+### 3. **Set Up Claude Desktop**
+
+1. Install **Claude Desktop** and integrate it with the UNS_MCP server by following steps given below.
+2. **Restart Claude** to link with the MCP server and ensure workflow functionality.
+
+---
+
+### 4. **Query and Run the Workflow**
+
+- Use **Claude** to interact with the system and execute queries to list, create, edit, delete and run the workflow. You can perform many such tasks, go through `Available Tools` given above.
+
+### 5. **Results**
+
+![](img\list-workflow.png)
+![](img\run-workflow.png)
 
 ## Claude Desktop Integration
 
 To install in Claude Desktop:
 
-1. Go to `~/Library/Application Support/Claude/` and create a `claude_desktop_config.json`.
+1. Go to `claude_desktop_config.json` by running the below command.
+
+```bash
+# For macOS or Linux:
+code ~/Library/Application\ Support/Claude/claude_desktop_config.json
+
+# For Windows:
+code $env:AppData\Claude\claude_desktop_config.json
+```
+
 2. In that file add:
 ```bash
 {
@@ -93,7 +151,7 @@ To install in Claude Desktop:
             "args":
             [
                 "--directory",
-                "ABSOLUTE/PATH/TO/UNS-MCP",
+                "ABSOLUTE/PATH/TO/YOUR-UNS-MCP-REPO/uns_mcp",
                 "run",
                 "server.py"
             ],
@@ -142,19 +200,16 @@ The main difference here is it becomes easier to set breakpoints on the server s
 
 ```
 # in one terminal, run the server:
-python uns_mcp/server.py --host 127.0.0.1 --port 8080
+uv run python uns_mcp/server.py --host 127.0.0.1 --port 8080
 
 or
 make sse-server
 
 # in another terminal, run the client:
-python minimal_client/client.py "http://127.0.0.1:8080/sse"
+uv run python minimal_client/client.py "http://127.0.0.1:8080/sse"
 or
 make sse-client
 ```
 
 Hint: `ctrl+c` out of the client first, then the server. Otherwise the server appears to hang.
 
-## CHANGELOG.md
-
-Any new developed features/fixes/enhancements will be added to CHANGELOG.md. 0.x.x-dev pre-release format is preferred before we bump to a stable version.
