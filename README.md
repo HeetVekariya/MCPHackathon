@@ -2,17 +2,23 @@
 
 By leveraging the Unstructured API, this server facilitates easy access to a set of powerful tools that extract meaningful information from research papers, which can then be used for fine-tuning a language model (LLM) to reduce the literature review time for researchers.
 
-## Setup
+## Table of Contents:
+1. [Setup](https://github.com/HeetVekariya/MCPHackathon?tab=readme-ov-file#setup)
+2. [Requirements](https://github.com/HeetVekariya/MCPHackathon?tab=readme-ov-file#requirements)
+3. [Project Flow](https://github.com/HeetVekariya/MCPHackathon?tab=readme-ov-file#project-flow)
+4. [Available Tools](https://github.com/HeetVekariya/MCPHackathon?tab=readme-ov-file#available-tools)
+5. [Follow Along](https://github.com/HeetVekariya/MCPHackathon?tab=readme-ov-file#follow-along)
+6. [Claude Desktop Integration](https://github.com/HeetVekariya/MCPHackathon?tab=readme-ov-file#claude-desktop-integration)
+7. [Debugging Tools](https://github.com/HeetVekariya/MCPHackathon?tab=readme-ov-file#debugging-tools)
+8. [Running locally minimal client with server](https://github.com/HeetVekariya/MCPHackathon?tab=readme-ov-file#running-locally-minimal-client-accessing-local-the-mcp-server-over-http--sse)
 
-1. Install dependencies:
+
+## Setup
+Install dependencies:
 - `uv add "mcp[cli]"`
 - `uv pip install --upgrade unstructured-client python-dotenv`
 
 or use `uv sync`.
-
-2. Set your Unstructured API key as an environment variable.
-   - Create a `.env` file in the root directory, and add a line with your key: `UNSTRUCTURED_API_KEY="YOUR_KEY"`
-
 
 ## Requirements
 
@@ -51,9 +57,9 @@ Before you can begin working with the **UNS_MCP** project, make sure you have th
 4. Structured Data (JSON) Output is stored in the destination source
    - The result from the Unstructured API is transformed into JSON format, which can then be further utilized to fine-tune LLMs, helping researchers quickly find the relevant information without manually reading the entire paper.
 
-![](img\user-flow.png)
+![](https://github.com/HeetVekariya/MCPHackathon/blob/main/img/user-flow.png)
 
-![](img\unstructured-workflow.png)
+![](https://github.com/HeetVekariya/MCPHackathon/blob/main/img/unstructured-workflow.png)
 
 ## Available Tools
 
@@ -112,7 +118,7 @@ Note: **Tweak the Flow**: Adjust any step (partitioning, chunking, enrichment, e
 
 ### 3. **Set Up Claude Desktop**
 
-1. Install **Claude Desktop** and integrate it with the UNS_MCP server by following steps given below.
+1. Install **Claude Desktop** and integrate it with the UNS_MCP server by following steps given [below](https://github.com/HeetVekariya/MCPHackathon?tab=readme-ov-file#claude-desktop-integration).
 2. **Restart Claude** to link with the MCP server and ensure workflow functionality.
 
 ---
@@ -123,9 +129,9 @@ Note: **Tweak the Flow**: Adjust any step (partitioning, chunking, enrichment, e
 
 ### 5. **Results**
 
-![](img\list-workflow.png)
-![](img\run-workflow.png)
-![](img\ui-job-output.png)
+![](https://github.com/HeetVekariya/MCPHackathon/blob/main/img/list-workflow.png)
+![](https://github.com/HeetVekariya/MCPHackathon/blob/main/img/run-workflow.png)
+![](https://github.com/HeetVekariya/MCPHackathon/blob/main/img/ui-job-output.png)
 
 ## Claude Desktop Integration
 
