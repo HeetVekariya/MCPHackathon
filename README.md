@@ -2,6 +2,9 @@
 
 By leveraging the Unstructured API, this server facilitates easy access to a set of powerful tools that extract meaningful information from research papers, which can then be used for fine-tuning a language model (LLM) to reduce the literature review time for researchers.
 
+### Check out the Blog here: 
+- For a detailed explanation of the hackathon, the project, and to follow along, check out my blog post on Dev.to: [Unstructured Model Context Protocol Hackathon.](https://dev.to/heetvekariya/unstructured-model-context-protocol-hackathon-26n7)
+
 ## Table of Contents:
 1. [Setup](https://github.com/HeetVekariya/MCPHackathon?tab=readme-ov-file#setup)
 2. [Requirements](https://github.com/HeetVekariya/MCPHackathon?tab=readme-ov-file#requirements)
